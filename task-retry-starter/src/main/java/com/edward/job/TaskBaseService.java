@@ -41,6 +41,7 @@ public class TaskBaseService {
         LambdaQueryWrapper<TaskRetryLog> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TaskRetryLog::getProjectName, envUtil.getApplicationName());
         if (CollectionUtils.isEmpty(ids)) {
+            queryWrapper.le(TaskRetryLog::getRetryCount, taskRetryConfig.getTaskMaxRetry());
             queryWrapper.in(TaskRetryLog::getStatus, TaskRetryLogStatusEnum.INIT.getValue(), TaskRetryLogStatusEnum.RETRYING.getValue());
             queryWrapper.le(TaskRetryLog::getNextSendTime, LocalDateTime.now());
         } else {
